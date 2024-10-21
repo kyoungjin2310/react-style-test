@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import styled, { DefaultTheme, ThemeProvider } from "styled-components";
+import { defaultTheme, darkTheme } from "./styled/theme/index";
+import GlobalStyles from "./styled/theme/globalStyle";
+// styled-components 생성.
+const Text = styled.p`
+  color: var(--color__primary);
+`;
+
+// 테마 모듈 선언
+const themes = {
+  default: defaultTheme,
+  dark: darkTheme,
+};
+
+// 테마 타입 선언
+type Theme = keyof typeof themes; // 'default' | 'dark'
+
+// 버튼 렌더링을 위해 테마 모듈 key를 배열로 변환
+const keysOfThemes = Object.keys(themes) as Theme[];
 
 function App() {
+  const [theme, setTheme] = useState<Theme>("default");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={themes[theme]}>
+      <GlobalStyles />
+      <p>Hello world!</p>
+
+      {keysOfThemes.map((theme) => (
+        <button key={theme} onClick={() => setTheme(theme)}>
+          {theme}
+        </button>
+      ))}
+    </ThemeProvider>
   );
 }
-
 export default App;
