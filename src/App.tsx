@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled, { DefaultTheme, ThemeProvider } from "styled-components";
 import { defaultTheme, darkTheme } from "./styled/theme/index";
 import GlobalStyles from "./styled/theme/globalStyle";
+import Button from "./styled/component/Button";
 // styled-components 생성.
 const Text = styled.p`
   color: var(--color__primary);
@@ -32,6 +33,7 @@ function App() {
           {theme}
         </button>
       ))}
+      <Button>test</Button>
     </ThemeProvider>
   );
 }
