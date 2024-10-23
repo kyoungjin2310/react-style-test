@@ -1,40 +1,41 @@
-import React, { useState } from "react";
-import styled, { DefaultTheme, ThemeProvider } from "styled-components";
-import { defaultTheme, darkTheme } from "./styled/theme/index";
-import GlobalStyles from "./styled/theme/globalStyle";
-import Button from "./styled/component/Button";
-// styled-components 생성.
-const Text = styled.p`
-  color: var(--color__primary);
-`;
-
-// 테마 모듈 선언
-const themes = {
-  default: defaultTheme,
-  dark: darkTheme,
-};
-
-// 테마 타입 선언
-type Theme = keyof typeof themes; // 'default' | 'dark'
-
-// 버튼 렌더링을 위해 테마 모듈 key를 배열로 변환
-const keysOfThemes = Object.keys(themes) as Theme[];
+import { ThemeProvider } from "styled-components";
+import { useState } from "react";
+import { themes } from "./styled/theme/theme";
 
 function App() {
-  const [theme, setTheme] = useState<Theme>("default");
+  const [themeName, setThemeName] = useState<string>("theme1"); // 초기 테마를 theme1으로 설정
+  const [isDarkMode, setIsDarkMode] = useState(false); // 초기 모드를 라이트 모드로 설정
+
+  const toggleThemeMode = () => {
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
+  const switchTheme = (name: string) => {
+    console.log(name);
+    setThemeName(name); // 테마 변경
+  };
+
+  const currentTheme = themes[themeName][isDarkMode ? "dark" : "light"];
 
   return (
-    <ThemeProvider theme={themes[theme]}>
-      <GlobalStyles />
-      <p>Hello world!</p>
-
-      {keysOfThemes.map((theme) => (
-        <button key={theme} onClick={() => setTheme(theme)}>
-          {theme}
-        </button>
-      ))}
-      <Button>test</Button>
+    <ThemeProvider theme={currentTheme}>
+      <div
+        style={{
+          background: currentTheme.background,
+          color: currentTheme.color,
+        }}
+      >
+        <button onClick={toggleThemeMode}>Toggle Dark Mode</button>
+        <select onChange={(e) => switchTheme(e.target.value)} value={themeName}>
+          <option value="theme1">Theme 1</option>
+          <option value="theme2">Theme 2</option>
+          <option value="theme3">Theme 3</option>
+          {/* theme4 ~ theme7 옵션 추가 */}
+        </select>
+        {/* 나머지 앱 컴포넌트 */}
+      </div>
     </ThemeProvider>
   );
 }
+
 export default App;
